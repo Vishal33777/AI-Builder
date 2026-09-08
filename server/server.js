@@ -10,7 +10,7 @@ const app=express();
 
 await connectToDatabase()
 
-app.use(cors({origin: process.env.ORIGINS.split(","), credentials: true}))
+app.use(cors({origin: "https://ai-builder-alpha-9802.vercel.app", credentials: true}))
 app.use(cookieParser())
 app.use(express.json())
 
