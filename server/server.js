@@ -6,12 +6,13 @@ import { connectToDatabase } from "./config/db.js";
 import authRouter from "./routes/authRoutes.js";
 import projectRouter from "./routes/projectRoutes.js";
 
-const app=express();
+const app = express();
 
-await connectToDatabase()
+await connectToDatabase();
 
 const allowedOrigins = [
-  "https://ai-builder-seven-kappa.vercel.app/login"
+  "http://localhost:5173",
+  "https://ai-builder-seven-kappa.vercel.app",
 ];
 
 app.use(
@@ -20,32 +21,41 @@ app.use(
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS"));
+        callback(new Error(`Not allowed by CORS: ${origin}`));
       }
     },
     credentials: true,
   })
 );
-app.use(cookieParser())
-app.use(express.json())
 
-app.get("/", (req, res) => res.send("Server is Live!"));
+app.use(cookieParser());
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("Server is Live!");
+});
 
 app.get("/api/auth/test", (req, res) => {
-  res.json({ message: "Auth route is working" });
+  res.json({
+    message: "Auth route is working",
+  });
 });
 
 app.use("/api/auth", authRouter);
 app.use("/api/projects", projectRouter);
 
-//Centralized error handler
-app.use((err,_req,res,_next)=>{
+// Centralized error handler
+app.use((err, _req, res, _next) => {
   console.error(`[Error] ${err.message}`);
-  res.status(500).json({error: err.message})
-})
 
-const port=process.env.PORT || 3000;
+  res.status(500).json({
+    success: false,
+    error: err.message,
+  });
+});
 
-app.listen(port,()=>{
-  console.log(`Server is running at http://localhost:${port}`)
-})
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
+});
