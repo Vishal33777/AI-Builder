@@ -10,7 +10,23 @@ const app=express();
 
 await connectToDatabase()
 
-app.use(cors({origin: "https://ai-builder-alpha-9802.vercel.app", credentials: true}))
+const allowedOrigins = [
+  "https://ai-builder-alpha-9802.vercel.app",
+  "https://ai-builder-git-main-alpha-9802.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(cookieParser())
 app.use(express.json())
 
