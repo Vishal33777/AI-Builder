@@ -11,8 +11,7 @@ const app=express();
 await connectToDatabase()
 
 const allowedOrigins = [
-  "https://ai-builder-alpha-9802.vercel.app",
-  "https://ai-builder-git-main-alpha-9802.vercel.app",
+  "https://ai-builder-seven-kappa.vercel.app/login"
 ];
 
 app.use(
