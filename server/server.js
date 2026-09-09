@@ -32,15 +32,11 @@ app.use(express.json())
 
 app.get("/", (req, res) => res.send("Server is Live!"));
 
-console.log("AUTH ROUTER LOADED");
-
-app.use("/api/auth", (req, res, next) => {
-  console.log("AUTH REQUEST:", req.method, req.originalUrl);
-  next();
+app.get("/api/auth/test", (req, res) => {
+  res.json({ message: "Auth route is working" });
 });
 
 app.use("/api/auth", authRouter);
-
 app.use("/api/projects", projectRouter);
 
 //Centralized error handler
